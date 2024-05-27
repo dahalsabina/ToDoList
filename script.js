@@ -13,18 +13,28 @@ function addTask(){
         radio.name = "tasks";
         li.appendChild(radio);
 
-        listContainer.appendChild(li);
+       
         let span = document.createElement("span");
         span.innerHTML = "\u00d7";
         li.appendChild(span);
+        listContainer.appendChild(li);
+        saveData();
+        
+        
 
-        // Add an event listener to the span element to remove the task when clicked
+       
         span.addEventListener("click", function() {
             li.remove();
+            saveData();
+            
+            
+           
         });
     }
 
     inputBox.value="";
+    
+    
 }
 
 listContainer.addEventListener("click",function(e){
@@ -33,6 +43,7 @@ listContainer.addEventListener("click",function(e){
         let listItem;
         if(e.target.tagName==="LI"){
             listItem = e.target;
+            
 
         }
         else if (e.target.tagName==="INPUT" && e.target.type==="radio"){
@@ -48,6 +59,7 @@ listContainer.addEventListener("click",function(e){
        
 
         listItem.classList.toggle("checked");
+        
 
         let radio = listItem.querySelector("input[type='radio']");
         if (radio){
@@ -62,14 +74,41 @@ listContainer.addEventListener("click",function(e){
 
             
         }
+        saveData();
         
 
        
         
-
+   
         
     }
     
     
 },false);
 
+function saveData(){
+    localStorage.setItem("data",listContainer.innerHTML);
+   
+
+}
+
+
+function showTask(){
+    listContainer.innerHTML = localStorage.getItem("data")||"";
+    let spans = listContainer.getElementsByTagName("span");
+    for (let span of spans){
+        span.addEventListener("click",function(){
+            span.parentElement.remove();
+            saveData();
+        }
+        
+        
+        );
+        
+
+    }
+
+}
+
+
+showTask();
